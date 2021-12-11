@@ -1,9 +1,15 @@
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ATC {
+    //быстро работает, реализует FIFO, что еще нужно
     private final ConcurrentLinkedQueue<Call> queue = new ConcurrentLinkedQueue<>();
 
-    public void startCallGenration(int callCount, int callTimeOut) {
+    /**
+     * Запускает процесс генерации звонков
+     * @param callCount - число звонков для генерации
+     * @param callTimeOut - таймаут между генерациями звонков
+     */
+    public void startCallGeneration(int callCount, int callTimeOut) {
         for (int i = 0; i <callCount ; i++) {
             queue.add(new Call());
             System.out.println(
@@ -16,6 +22,13 @@ public class ATC {
         }
     }
 
+    /**
+     * Запускает процесс обработки звонков из очереди. Работает до тех пор, пока количество ситуаций, когда очередь
+     * пуста при попытке обработать звонок, не превысит заданное значение.
+     * @param processingTime - время обработки звонка
+     * @param awaitingTime - время ожидания, если очередь звонков пуста
+     * @param emptyQueueStatesLimit - количество ситуаций когда очередь пуста до отключения
+     */
     public void processCalls(int processingTime, int awaitingTime, int emptyQueueStatesLimit) {
         //счетчик обработанных данным потоком-оператором звонков
         ThreadLocal<Integer> processedCalls = ThreadLocal.withInitial(() -> 0);

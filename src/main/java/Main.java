@@ -1,3 +1,6 @@
+/**
+ * Эмулятор колл-центра
+ */
 public class Main {
     //количество звонков которые будут сгенерированы
     static final int CALL_COUNT = 30;
@@ -21,16 +24,14 @@ public class Main {
         ATC atc = new ATC();
 
         //начинаем генерировать звонки
-        new Thread(null,()->atc.startCallGenration(CALL_COUNT, CALL_TIMEOUT),
+        new Thread(null,()->atc.startCallGeneration(CALL_COUNT, CALL_TIMEOUT),
                 "Поток-генератор").start();
 
-        //создаем потоки операторов
         for (int i = 0; i < PROCESSORS_COUNT; i++) {
             new Thread(
                     null,
                     () -> atc.processCalls(CALL_PROCESSING_TIME,CALL_AWAITING_TIME,EMPTY_QUEUE_STATES_LIMIT),
-                    "Поток-оператор" + (i + 1)).start();
+                    "Поток-обработчик " + (i + 1)).start();
         }
-
     }
 }
